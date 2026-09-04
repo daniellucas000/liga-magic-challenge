@@ -30,6 +30,28 @@ ob_start();
         <button class="btn btn--primary" id="new-card-btn" style="width: fit-content;">+ Nova carta</button>
     </div>
 
+    <div class="stats-bar" id="stats-bar">
+        <div class="stats-bar__item" style="--accent-color: linear-gradient(180deg, #6c757d, #adb5bd);">
+            <span class="stats-bar__value" id="stat-total">0</span>
+            <span class="stats-bar__label">Total</span>
+        </div>
+
+        <div class="stats-bar__item" style="--accent-color: linear-gradient(180deg, #C3C4C5, #D4301F);">
+            <span class="stats-bar__value" id="stat-magic">0</span>
+            <span class="stats-bar__label">Magic: The Gathering</span>
+        </div>
+
+        <div class="stats-bar__item" style="--accent-color: linear-gradient(180deg, #3466AF, #FFCB05);">
+            <span class="stats-bar__value" id="stat-pokemon">0</span>
+            <span class="stats-bar__label">Pokémon</span>
+        </div>
+
+        <div class="stats-bar__item" style="--accent-color: linear-gradient(180deg, #F2411F, #F9F9EE);">
+            <span class="stats-bar__value" id="stat-yugioh">0</span>
+            <span class="stats-bar__label">Yu-Gi-Oh!</span>
+        </div>
+    </div>
+
     <div class="filters">
         <select id="game-filter">
             <option value="">Todos os jogos</option>
@@ -38,18 +60,37 @@ ob_start();
             <option value="yugioh">Yu-Gi-Oh!</option>
         </select>
         <input type="text" id="search-filter" placeholder="Buscar por nome..." />
+
+        <div class="view-toggle" role="group" aria-label="Modo de visualização">
+            <button type="button" class="view-toggle__btn is-active" id="view-table-btn" aria-pressed="true" title="Visualizar em tabela">
+                <span class="icon">☰</span>
+            </button>
+            <button type="button" class="view-toggle__btn" id="view-cards-btn" aria-pressed="false" title="Visualizar em cards">
+                <span class="icon">🂠</span>
+            </button>
+        </div>
     </div>
 
-    <div class="card-table-wrap">
+    <div class="card-table-wrap" id="table-view">
         <table>
             <thead>
                 <tr>
                     <th>Imagem</th>
-                    <th>Nome (EN)</th>
+                    <th>
+                        <button type="button" class="table-sort" id="sort-name">
+                            Nome (EN)
+                            <span class="sort-arrow">↕</span>
+                        </button>
+                    </th>
                     <th>Nome (PT)</th>
                     <th>Jogo</th>
                     <th>Edição</th>
-                    <th>Raridade</th>
+                    <th>
+                        <button type="button" class="table-sort" id="sort-rarity">
+                            Raridade
+                            <span class="sort-arrow">↕</span>
+                        </button>
+                    </th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -59,6 +100,13 @@ ob_start();
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="cards-grid" id="cards-view" style="display:none;"></div>
+    <div class="pagination" id="pagination">
+        <button class="btn btn--ghost" id="pagination-prev" disabled>‹ Anterior</button>
+        <span class="pagination__info" id="pagination-info"></span>
+        <button class="btn btn--ghost" id="pagination-next" disabled>Próxima ›</button>
     </div>
 </main>
 
@@ -75,7 +123,7 @@ ob_start();
         </div>
         <div class="modal__body">
             <div class="error-msg" id="form-error"></div>
-            <form id="form-carta" novalidate>
+            <form id="form-carta" novalidate enctype="multipart/form-data">
                 <input type="hidden" id="card-id" />
 
                 <div class="field-row">
@@ -117,8 +165,10 @@ ob_start();
                             required />
                     </div>
                     <div class="field">
-                        <label for="image_url">URL da imagem</label>
-                        <input type="url" id="image_url" placeholder="https://..." />
+                        <label for="image_file">Imagem da carta</label>
+                        <input type="file" id="image_file" accept="image/png, image/jpeg, image/webp" />
+                        <img id="image_preview" style="display:none; max-width:120px; margin-top:8px; border-radius:6px;" />
+                        <input type="hidden" id="image_url" name="image_url" />
                     </div>
                 </div>
             </form>
@@ -137,8 +187,8 @@ ob_start();
 
 <div class="toast" id="toast"></div>
 
-<script src="javascript/dashboard.js"></script>
+<script type="module" src="javascript/main.js"></script>
 <?php
 $content = ob_get_clean();
-$pageTitle = 'Portal de Cartas — Gerenciador';
+$pageTitle = 'LigaMagic - Gerenciador';
 include __DIR__ . '/partials/layout.php';

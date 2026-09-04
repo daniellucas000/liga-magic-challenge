@@ -30,7 +30,7 @@
 .field select:focus {
     outline: 2px solid var(--orange);
     outline-offset: 1px;
-    border: none;
+    border: 1px solid transparent;
 }
 
 .field select:disabled {

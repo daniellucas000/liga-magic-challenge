@@ -14,3 +14,4 @@ $router->add('POST',   '/api/cards',    [CardController::class, 'create'],     a
 $router->add('PUT',    '/api/cards',    [CardController::class, 'update'],    auth: true);
 $router->add('DELETE', '/api/cards',    [CardController::class, 'delete'],    auth: true);
 $router->add('GET',    '/api/editions', [CardController::class, 'editions'],  auth: true);
+$router->add('POST', '/api/upload-image', [CardController::class, 'uploadImage'], auth: true);

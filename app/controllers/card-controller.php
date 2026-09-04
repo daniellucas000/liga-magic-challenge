@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Http;
 use App\Models\Card;
+use App\Services\ImageUploadService;
 
 class CardController
 {
@@ -123,5 +124,20 @@ class CardController
             'image_url'       => trim($d['image_url'] ?? '') ?: null,
             'rarity'          => trim($d['rarity']),
         ];
+    }
+
+    public function uploadImage(): void
+    {
+        if (empty($_FILES['image_file'])) {
+            Http::json(['error' => 'Nenhuma imagem foi enviada.'], 422);
+        }
+
+        $result = ImageUploadService::upload($_FILES['image_file']);
+
+        if (!$result['success']) {
+            Http::json(['error' => $result['error']], 422);
+        }
+
+        Http::json(['path' => $result['path']], 201);
     }
 }

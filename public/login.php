@@ -34,7 +34,7 @@ ob_start();
                     Entrar
                 </button>
             </form>
-            <p class="hint">login: admin · senha: admin123</p>
+            <p class="hint">login: admin - senha: admin123</p>
         </div>
     </div>
 </div>

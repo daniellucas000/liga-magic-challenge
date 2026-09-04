@@ -47,5 +47,7 @@ h1, h2, h3 {
 button {
     font-family: "Poppins", sans-serif;
     cursor: pointer;
+    background: none;
+    border: none;
 }
 

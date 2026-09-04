@@ -1,0 +1,51 @@
+:root {
+    --orange: #ff5a00;
+    --white: #fff;
+    --black: #000;
+    --ink: #1c2438;
+    --ink-soft: #2a3550;
+    --background: #dddbdb;
+    --parchment: #f7f1e0;
+    --parchment-dim: #efe7d6;
+    --brass: #b8935a;
+    --brass-dark: #96753f;
+    --charcoal: #26241f;
+    --charcoal-soft: #5a5648;
+    --danger: #8c3b2e;
+    --success: #4b7156;
+    --border: #ddd2b8;
+    --radius: 3px;
+    --shadow: 0 2px 10px rgba(28, 36, 56, 0.08);
+
+    --green-100: #ecfdf3;
+    --green-300: #bffcd9;
+    --green-700: #008a2e;
+
+    --toast-error-bg: #fff0f0;
+    --toast-error-border: #ffe0e1; 
+    --red-700: #e60000;
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    background: var(--background);
+    font-family: "Poppins", sans-serif;
+    line-height: 1.5;
+}
+
+h1, h2, h3 {
+    font-family: "Poppins", sans-serif;
+    color: var(--ink);
+    margin: 0;
+}
+
+button {
+    font-family: "Poppins", sans-serif;
+    cursor: pointer;
+}
+

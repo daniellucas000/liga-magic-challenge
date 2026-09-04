@@ -1,0 +1,144 @@
+<?php
+ob_start();
+?>
+<header class="header">
+    <div class="header__wrapper">
+        <div class="header__logo">
+            <img src="images/logo.png" alt="Logo Liga Magic" />
+            <span>Gerenciador</span>
+        </div>
+
+        <div class="header__user">
+            <span class="header__greetings">
+                Olá,
+                <strong id="user-name"></strong>
+            </span>
+            <button class="btn" id="logout-btn">
+                <span class="icon">⏻</span>
+                Sair
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="page-head">
+        <div>
+            <h2>Cartas cadastradas</h2>
+            <p>Liste, adicione, edite e remova cartas do acervo.</p>
+        </div>
+        <button class="btn btn--primary" id="new-card-btn" style="width: fit-content;">+ Nova carta</button>
+    </div>
+
+    <div class="filters">
+        <select id="game-filter">
+            <option value="">Todos os jogos</option>
+            <option value="magic">Magic: The Gathering</option>
+            <option value="pokemon">Pokémon</option>
+            <option value="yugioh">Yu-Gi-Oh!</option>
+        </select>
+        <input type="text" id="search-filter" placeholder="Buscar por nome..." />
+    </div>
+
+    <div class="card-table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome (EN)</th>
+                    <th>Nome (PT)</th>
+                    <th>Jogo</th>
+                    <th>Edição</th>
+                    <th>Raridade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr class="loading-row">
+                    <td colspan="7">Carregando cartas...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <div class="modal__header">
+            <h2 id="modal-title">Nova carta</h2>
+            <button
+                class="modal__close"
+                id="close-modal-btn"
+                aria-label="Fechar">
+                &times;
+            </button>
+        </div>
+        <div class="modal__body">
+            <div class="error-msg" id="form-error"></div>
+            <form id="form-carta" novalidate>
+                <input type="hidden" id="card-id" />
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="english_name">Nome (inglês) <span>*</span></label>
+                        <input type="text" id="english_name" required />
+                    </div>
+                    <div class="field">
+                        <label for="portuguese_name">Nome (português)</label>
+                        <input type="text" id="portuguese_name" />
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="card_game">Card Game <span>*</span></label>
+                    <select id="card_game" required>
+                        <option value="">Selecione um jogo...</option>
+                        <option value="magic">Magic: The Gathering</option>
+                        <option value="pokemon">Pokémon</option>
+                        <option value="yugioh">Yu-Gi-Oh!</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="edition">Edição <span>*</span></label>
+                    <select id="edition" required disabled>
+                        <option value="">Selecione um jogo primeiro</option>
+                    </select>
+                    <span class="select-loading" id="edition-loading">Buscando edições...</span>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="rarity">Raridade <span>*</span></label>
+                        <input
+                            type="text"
+                            id="rarity"
+                            placeholder="Ex: Rara, Comum..."
+                            required />
+                    </div>
+                    <div class="field">
+                        <label for="image_url">URL da imagem</label>
+                        <input type="url" id="image_url" placeholder="https://..." />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn--ghost" id="cancel-btn">Cancelar</button>
+            <button
+                class="btn btn--primary"
+                id="save-btn"
+                style="width: auto; padding-left: 24px; padding-right: 24px">
+                Salvar carta
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="javascript/dashboard.js"></script>
+<?php
+$content = ob_get_clean();
+$pageTitle = 'Portal de Cartas — Gerenciador';
+include __DIR__ . '/partials/layout.php';

@@ -111,11 +111,6 @@ class CardController
             return;
         }
 
-        if ($error = $this->assertOwnership($card)) {
-            Http::json(['error' => $error], 403);
-            return;
-        }
-
         unset($card['id']);
         $card['english_name'] = $card['english_name'] . ' - cópia';
         if (!empty($card['portuguese_name'])) {

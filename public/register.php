@@ -10,8 +10,8 @@ ob_start();
             </div>
         </div>
         <div class="login-card__body">
-            <div class="error-msg" id="erro-login"></div>
-            <form id="form-login" novalidate>
+            <div class="error-msg" id="erro-registro"></div>
+            <form id="form-registro" novalidate>
                 <div class="field">
                     <label for="username">Usuário</label>
                     <input
@@ -27,23 +27,20 @@ ob_start();
                         type="password"
                         id="senha"
                         name="senha"
-                        autocomplete="current-password"
+                        autocomplete="new-password"
                         required />
                 </div>
-                <button type="submit" class="btn btn--primary" id="btn-entrar">
-                    Entrar
+                <button type="submit" class="btn btn--primary" id="btn-cadastrar">
+                    Cadastrar
                 </button>
             </form>
-            <p class="hint">
-                Não tem conta? <a href="register.php">Cadastre-se</a><br>
-                login: admin - senha: admin123
-            </p>
+            <p class="hint"><a href="login.php">Já tem conta? Entrar</a></p>
         </div>
     </div>
 </div>
 
-<script src="javascript/login.js"></script>
+<script src="javascript/register.js"></script>
 <?php
 $content = ob_get_clean();
-$pageTitle = 'Portal de Cartas — Acesso';
+$pageTitle = 'Portal de Cartas — Cadastro';
 include __DIR__ . '/partials/layout.php';

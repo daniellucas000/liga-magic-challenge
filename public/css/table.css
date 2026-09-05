@@ -176,6 +176,7 @@ tbody tr:last-child td {
 
 .card-item__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 12px;
     border-top: 1px solid #eee;

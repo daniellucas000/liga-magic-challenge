@@ -47,5 +47,6 @@ export const dom = {
 
   toast: document.getElementById('toast'),
 
+  manageUsersBtn: document.getElementById('manage-users-btn'),
   actionsHeader: document.getElementById('actions-header'),
 };

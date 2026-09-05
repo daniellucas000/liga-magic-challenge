@@ -1,6 +1,7 @@
 import { dom } from './dom.js';
 import { state } from './state.js';
 import { apiFetch } from './api.js';
+import { checkSession, bindHeader } from './session.js';
 import { render, renderStats } from './render.js';
 import { handleSort } from './cards-data.js';
 import {
@@ -13,23 +14,16 @@ import {
   fetchEditions,
 } from './modal.js';
 
-async function checkSession() {
-  try {
-    const res = await apiFetch('/session');
-    if (!res.ok) {
-      window.location.href = 'login.php';
-      return;
-    }
-    const data = await res.json();
-    dom.userNameEl.textContent = data.user.username;
-    state.userRole = data.user.role;
+async function initSession() {
+  const user = await checkSession();
+  if (!user) return;
 
-    if (state.userRole === 'viewer') {
-      dom.newCardBtn.style.display = 'none';
-      dom.actionsHeader.style.display = 'none';
-    }
-  } catch (e) {
-    window.location.href = 'login.php';
+  bindHeader(user);
+  state.userRole = user.role;
+
+  if (state.userRole === 'viewer') {
+    dom.newCardBtn.style.display = 'none';
+    dom.actionsHeader.style.display = 'none';
   }
 }
 
@@ -84,13 +78,6 @@ function setView(view) {
 }
 
 function bindEvents() {
-  dom.logoutBtn.addEventListener('click', async function () {
-    try {
-      await apiFetch('/logout', { method: 'POST' });
-    } catch (e) {}
-    window.location.href = 'login.php';
-  });
-
   dom.tableBody.addEventListener('click', handleListClick);
   dom.cardsViewEl.addEventListener('click', handleListClick);
 
@@ -161,4 +148,4 @@ function bindEvents() {
 
 bindEvents();
 setView(state.currentView);
-checkSession().then(loadCards);
+initSession().then(loadCards);

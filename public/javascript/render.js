@@ -69,7 +69,7 @@ function cardItemHtml(card) {
         ${
           card.image
             ? `<img class="card-item__image" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.english_name)}" onerror="this.style.visibility='hidden'">`
-            : `<div class="card-item__image"></div>`
+            : `<img class="card-item__image" src="/images/empty-img.png">`
         }
         <div class="card-item__body">
             <span class="card-item__name">${escapeHtml(card.english_name)}</span>

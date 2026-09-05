@@ -28,6 +28,7 @@ require_once __DIR__ . '/../app/models/user.php';
 require_once __DIR__ . '/../app/models/card.php';
 require_once __DIR__ . '/../app/services/image-upload-service.php';
 require_once __DIR__ . '/../app/services/card-validator-service.php';
+require_once __DIR__ . '/../app/controllers/user-controller.php';
 require_once __DIR__ . '/../app/controllers/auth-controller.php';
 require_once __DIR__ . '/../app/controllers/card-controller.php';
 

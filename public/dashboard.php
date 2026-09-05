@@ -1,33 +1,17 @@
 <?php
 ob_start();
 ?>
-<header class="header">
-    <div class="header__wrapper">
-        <div class="header__logo">
-            <img src="images/logo.png" alt="Logo Liga Magic" />
-            <span>Gerenciador</span>
-        </div>
-
-        <div class="header__user">
-            <span class="header__greetings">
-                Olá,
-                <strong id="user-name"></strong>
-            </span>
-            <button class="btn" id="logout-btn" style="color: #fff;">
-                <span class="icon">⏻</span>
-                Sair
-            </button>
-        </div>
-    </div>
-</header>
-
+<?php include __DIR__ . '/partials/header.php'; ?>
 <main>
     <div class="page-head">
         <div>
             <h2>Cartas cadastradas</h2>
             <p>Liste, adicione, edite e remova cartas do acervo.</p>
         </div>
-        <button class="btn btn--primary" id="new-card-btn" style="width: fit-content;">+ Nova carta</button>
+        <div style="display: flex; gap: 10px;">
+            <a href="users.php" class="btn btn--secondary" id="manage-users-btn">Usuários</a>
+            <button class="btn btn--primary" id="new-card-btn" style="width: fit-content;">+ Nova carta</button>
+        </div>
     </div>
 
     <div class="stats-bar" id="stats-bar">

@@ -4,14 +4,20 @@ import { escapeHtml } from './utils.js';
 import { getFilteredCards, getPaginatedCards } from './cards-data.js';
 
 function getEmptyStateHtml(game) {
-  let emptyImage = '';
+  let emptyImage = `
+    <iframe
+      src="https://lottie.host/embed/c9578253-1722-40ca-b6df-c6ad233906dd/0D3QPTTS14.lottie"
+    ></iframe>
+  `;
 
   if (game === 'yugioh') {
     emptyImage = `<img src="images/empty-yugi.webp" alt="Nenhuma carta de Yu-Gi-Oh encontrada">`;
   }
+
   if (game === 'magic') {
     emptyImage = `<img src="images/magic.webp" alt="Nenhuma carta de Magic: The Gathering encontrada">`;
   }
+
   if (game === 'pokemon') {
     emptyImage = `<img src="images/empty-ash.jpeg" alt="Nenhuma carta de Pokémon encontrada">`;
   }
@@ -25,47 +31,61 @@ function getEmptyStateHtml(game) {
   `;
 }
 
-function cardRowHtml(c) {
+function cardRowHtml(card) {
+  const isViewer = state.userRole === 'viewer';
+
   return `
     <tr>
         <td data-label="Imagem">${
-          c.image_url
-            ? `<img class="thumb" src="${escapeHtml(c.image_url)}" alt="${escapeHtml(c.english_name)}" onerror="this.style.visibility='hidden'">`
-            : `<div class="thumb"></div>`
+          card.image
+            ? `<img class="thumb" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.english_name)}" onerror="this.style.visibility='hidden'">`
+            : `<div class="thumb">${card.english_name.slice(0, 2)}</div>`
         }</td>
-        <td data-label="Nome (EN)">${escapeHtml(c.english_name)}</td>
-        <td data-label="Nome (PT)">${escapeHtml(c.portuguese_name || '—')}</td>
-        <td data-label="Jogo"><span class="game-badge game-badge--${c.card_game}">${GAME_NAMES[c.card_game]}</span></td>
-        <td data-label="Edição">${escapeHtml(c.edition_name)}</td>
-        <td data-label="Raridade">${escapeHtml(c.rarity)}</td>
-        <td data-label="Ações">
-            <div class="row-actions">
-                <button class="btn btn--ghost" style="padding:6px 12px; font-size:13px;" data-edit="${c.id}">Editar</button>
-                <button class="btn btn--danger" data-delete="${c.id}">Excluir</button>
-            </div>
-        </td>
+        <td data-label="Nome (inglês)">${escapeHtml(card.english_name)}</td>
+        <td data-label="Nome (português)">${escapeHtml(card.portuguese_name || '—')}</td>
+        <td data-label="Jogo"><span class="game-badge game-badge--${card.card_game}">${GAME_NAMES[card.card_game]}</span></td>
+        <td data-label="Edição">${escapeHtml(card.edition_name)}</td>
+        <td data-label="Raridade">${escapeHtml(card.rarity)}</td>
+        ${
+          isViewer
+            ? ''
+            : `<td data-label="Ações">
+                <div class="row-actions">
+                    <button class="btn btn--ghost" style="padding:6px 12px; font-size:13px;" data-edit="${card.id}">Editar</button>
+                    <button class="btn btn--danger" data-delete="${card.id}">Excluir</button>
+                    <button class="btn btn--ghost" data-duplicate="${card.id}">Duplicar</button>
+                </div>
+            </td>`
+        }
     </tr>
   `;
 }
 
-function cardItemHtml(c) {
+function cardItemHtml(card) {
+  const isViewer = state.userRole === 'viewer';
+
   return `
     <div class="card-item">
         ${
-          c.image_url
-            ? `<img class="card-item__image" src="${escapeHtml(c.image_url)}" alt="${escapeHtml(c.english_name)}" onerror="this.style.visibility='hidden'">`
+          card.image
+            ? `<img class="card-item__image" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.english_name)}" onerror="this.style.visibility='hidden'">`
             : `<div class="card-item__image"></div>`
         }
         <div class="card-item__body">
-            <span class="card-item__name">${escapeHtml(c.english_name)}</span>
-            <span class="card-item__meta">${escapeHtml(c.portuguese_name || '—')}</span>
-            <span class="game-badge game-badge--${c.card_game}">${GAME_NAMES[c.card_game]}</span>
-            <span class="card-item__meta">${escapeHtml(c.edition_name)} · ${escapeHtml(c.rarity)}</span>
+            <span class="card-item__name">${escapeHtml(card.english_name)}</span>
+            <span class="card-item__meta">${escapeHtml(card.portuguese_name || '—')}</span>
+            <span class="game-badge game-badge--${card.card_game}">${GAME_NAMES[card.card_game]}</span>
+            <span class="card-item__meta">${escapeHtml(card.edition_name)} · ${escapeHtml(card.rarity)}</span>
         </div>
-        <div class="card-item__actions">
-            <button class="btn btn--ghost" style="flex:1; padding:6px; font-size:13px;" data-edit="${c.id}">Editar</button>
-            <button class="btn btn--danger" style="flex:1;" data-delete="${c.id}">Excluir</button>
-        </div>
+        ${
+          isViewer
+            ? ''
+            : `<div class="card-item__actions">
+                <button class="btn btn--ghost" style="flex:1; padding:6px; font-size:13px;" data-edit="${card.id}">Editar</button>
+                <button class="btn btn--danger" style="flex:1;" data-delete="${card.id}">Excluir</button>
+                <button class="btn btn--ghost" data-duplicate="${card.id}">Duplicar</button>
+            </div>`
+        }
     </div>
   `;
 }

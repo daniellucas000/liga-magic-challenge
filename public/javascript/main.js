@@ -9,6 +9,7 @@ import {
   closeModal,
   saveCard,
   deleteCard,
+  duplicateCard,
   fetchEditions,
 } from './modal.js';
 
@@ -21,6 +22,12 @@ async function checkSession() {
     }
     const data = await res.json();
     dom.userNameEl.textContent = data.user.username;
+    state.userRole = data.user.role;
+
+    if (state.userRole === 'viewer') {
+      dom.newCardBtn.style.display = 'none';
+      dom.actionsHeader.style.display = 'none';
+    }
   } catch (e) {
     window.location.href = 'login.php';
   }
@@ -52,8 +59,11 @@ async function loadCards() {
 function handleListClick(e) {
   const editBtn = e.target.closest('[data-edit]');
   const deleteBtn = e.target.closest('[data-delete]');
+  const duplicateBtn = e.target.closest('[data-duplicate]');
+
   if (editBtn) openEditModal(editBtn.dataset.edit);
   if (deleteBtn) deleteCard(deleteBtn.dataset.delete, loadCards);
+  if (duplicateBtn) duplicateCard(duplicateBtn.dataset.duplicate, loadCards);
 }
 
 function setView(view) {

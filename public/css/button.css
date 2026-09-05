@@ -50,16 +50,11 @@
     color: var(--charcoal);
 }
 
-.btn--ghost:hover { background: var(--parchment-dim); }
-
 .btn--danger {
     background: transparent;
-    color: var(--danger);
+    color: var(--red-700);
     border: 1px solid rgba(140, 59, 46, 0.3);
     padding: 6px 12px;
     font-size: 13px;
 }
 
-.btn--danger:hover { 
-    background: rgba(140, 59, 46, 0.08); 
-}

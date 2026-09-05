@@ -26,6 +26,10 @@
     outline: 2px solid transparent;
 }
 
+.field select {
+    padding: 8px 12px;
+}
+
 .field input:focus,
 .field select:focus {
     outline: 2px solid var(--orange);
@@ -34,8 +38,8 @@
 }
 
 .field select:disabled {
-    background: var(--parchment-dim);
-    color: var(--charcoal-soft);
+    background: var(--toast-error-bg);
+    color: var(--red-700);
 }
 
 .field-row {
@@ -71,14 +75,6 @@
     gap: 10px;
     margin-bottom: 18px;
     flex-wrap: wrap;
-}
-
-.filters select, .filters input {
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: #fff;
-    font-size: 13.5px;
 }
 
 @media (max-width: 640px) {

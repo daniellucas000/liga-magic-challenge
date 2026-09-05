@@ -14,8 +14,20 @@ class Http
     public static function requireAuth(): void
     {
         self::startSession();
+
         if (empty($_SESSION['user_id'])) {
-            self::json(['error' => 'Not authenticated.'], 401);
+            self::json(['error' => 'Não autenticado.'], 401);
+            exit;
+        }
+    }
+
+    public static function requireRole(array $roles): void
+    {
+        self::requireAuth();
+
+        if (!in_array($_SESSION['role'] ?? '', $roles, true)) {
+            self::json(['error' => 'Sem permissão para esta ação.'], 403);
+            exit;
         }
     }
 

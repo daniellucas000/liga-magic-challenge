@@ -25,7 +25,6 @@ export const dom = {
   portugueseNameInput: document.getElementById('portuguese_name'),
   cardGameSelect: document.getElementById('card_game'),
   editionSelect: document.getElementById('edition'),
-  editionLoading: document.getElementById('edition-loading'),
   rarityInput: document.getElementById('rarity'),
   imageUrlInput: document.getElementById('image_url'),
   imageFileInput: document.getElementById('image_file'),
@@ -41,5 +40,12 @@ export const dom = {
   statPokemon: document.getElementById('stat-pokemon'),
   statYugioh: document.getElementById('stat-yugioh'),
 
+  confirmModalOverlay: document.getElementById('confirm-modal-overlay'),
+  confirmModalMessage: document.getElementById('confirm-modal-message'),
+  confirmModalCancel: document.getElementById('confirm-modal-cancel'),
+  confirmModalOk: document.getElementById('confirm-modal-ok'),
+
   toast: document.getElementById('toast'),
+
+  actionsHeader: document.getElementById('actions-header'),
 };

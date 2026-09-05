@@ -16,4 +16,5 @@ export const state = {
   currentPage: 1,
   sortColumn: null,
   sortDirection: 'asc',
+  userRole: null,
 };

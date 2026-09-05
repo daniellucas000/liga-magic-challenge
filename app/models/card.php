@@ -26,8 +26,8 @@ class Card
     public static function create(array $data): int
     {
         $stmt = Database::connect()->prepare(
-            'INSERT INTO cards (english_name, portuguese_name, card_game, edition_id, edition_name, image_url, rarity)
-             VALUES (?, ?, ?, ?, ?, ?, ?)'
+            'INSERT INTO cards (english_name, portuguese_name, card_game, edition_id, edition_name, image, rarity, created_by)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
         );
 
         $stmt->execute([
@@ -36,8 +36,9 @@ class Card
             $data['card_game'],
             $data['edition_id'],
             $data['edition_name'],
-            $data['image_url'],
+            $data['image'],
             $data['rarity'],
+            $data['created_by'],
         ]);
 
         return (int) Database::connect()->lastInsertId();
@@ -47,7 +48,7 @@ class Card
     {
         $stmt = Database::connect()->prepare(
             'UPDATE cards SET english_name=?, portuguese_name=?, card_game=?, edition_id=?,
-             edition_name=?, image_url=?, rarity=? WHERE id=?'
+             edition_name=?, image=?, rarity=? WHERE id=?'
         );
 
         $stmt->execute([
@@ -56,7 +57,7 @@ class Card
             $data['card_game'],
             $data['edition_id'],
             $data['edition_name'],
-            $data['image_url'],
+            $data['image'],
             $data['rarity'],
             $id,
         ]);

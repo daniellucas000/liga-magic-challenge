@@ -34,13 +34,11 @@ export async function fetchEditions(game) {
 
   dom.editionSelect.disabled = true;
   dom.editionSelect.innerHTML = '<option value="">Carregando...</option>';
-  dom.editionLoading.classList.add('visible');
 
   try {
     const res = await apiFetch(`/editions?game=${encodeURIComponent(game)}`);
     const data = await res.json();
 
-    // A newer request has started since this one was sent — discard this result.
     if (myTicket !== state.editionRequestTicket) return;
 
     const editions = data.editions || [];
@@ -58,10 +56,6 @@ export async function fetchEditions(game) {
     if (myTicket !== state.editionRequestTicket) return;
     dom.editionSelect.innerHTML =
       '<option value="">Falha ao carregar edições</option>';
-  } finally {
-    if (myTicket === state.editionRequestTicket) {
-      dom.editionLoading.classList.remove('visible');
-    }
   }
 }
 
@@ -92,14 +86,16 @@ export async function openEditModal(id) {
   dom.rarityInput.value = card.rarity;
 
   dom.imageFileInput.value = '';
-  dom.imageUrlInput.value = card.image_url || '';
-  showImagePreview(card.image_url || '');
+  dom.imageUrlInput.value = card.image || '';
+  showImagePreview(card.image || '');
 
   clearFormError();
   dom.modalOverlay.classList.add('visible');
 
+  dom.saveBtn.disabled = true;
   await fetchEditions(card.card_game);
   dom.editionSelect.value = card.edition_id;
+  dom.saveBtn.disabled = false;
 }
 
 export function closeModal() {
@@ -109,7 +105,6 @@ export function closeModal() {
 async function uploadImageIfNeeded() {
   const selectedFile = dom.imageFileInput.files[0];
 
-  // Sem arquivo novo selecionado: mantém o caminho já existente (ex: edição sem trocar a imagem)
   if (!selectedFile) {
     return dom.imageUrlInput.value.trim() || '';
   }
@@ -143,7 +138,7 @@ export async function saveCard(loadCards) {
       ? editionOption.getAttribute('data-name') || editionOption.textContent
       : '',
     rarity: dom.rarityInput.value.trim(),
-    image_url: '',
+    image: '',
   };
 
   if (
@@ -164,7 +159,7 @@ export async function saveCard(loadCards) {
   dom.saveBtn.textContent = 'Salvando...';
 
   try {
-    payload.image_url = await uploadImageIfNeeded();
+    payload.image = await uploadImageIfNeeded();
 
     const res = await apiFetch('/cards', {
       method,
@@ -193,10 +188,10 @@ export async function saveCard(loadCards) {
 }
 
 export async function deleteCard(id, loadCards) {
-  const confirmDelete = window.confirm(
+  const confirmed = await confirmModal(
     'Tem certeza que deseja excluir esta carta? Esta ação não pode ser desfeita.'
   );
-  if (!confirmDelete) return;
+  if (!confirmed) return;
 
   const deleteBtn = document.querySelector(`[data-delete="${id}"]`);
   if (deleteBtn) deleteBtn.disabled = true;
@@ -213,10 +208,52 @@ export async function deleteCard(id, loadCards) {
       return;
     }
 
-    showToast(dom.toast, 'Cartão deletado.');
+    showToast(dom.toast, 'Carta deletado.');
     loadCards();
   } catch (e) {
     showToast(dom.toast, 'Erro de conexão com o servidor.', 'error');
     if (deleteBtn) deleteBtn.disabled = false;
   }
+}
+
+export async function duplicateCard(id, onDone) {
+  const res = await apiFetch(`/cards/${id}/duplicate`, { method: 'POST' });
+  const data = await res.json();
+
+  if (!res.ok) {
+    showToast(dom.toast, data.error || 'Erro ao duplicar carta.', 'error');
+    return;
+  }
+
+  showToast(dom.toast, data.message || 'Carta duplicada com sucesso.');
+  onDone();
+}
+
+export function confirmModal(message) {
+  return new Promise((resolve) => {
+    dom.confirmModalMessage.textContent = message;
+    dom.confirmModalOverlay.classList.add('visible');
+
+    function cleanup(result) {
+      dom.confirmModalOverlay.classList.remove('visible');
+      dom.confirmModalOk.removeEventListener('click', onOk);
+      dom.confirmModalCancel.removeEventListener('click', onCancel);
+      dom.confirmModalOverlay.removeEventListener('click', onOverlay);
+      resolve(result);
+    }
+
+    function onOk() {
+      cleanup(true);
+    }
+    function onCancel() {
+      cleanup(false);
+    }
+    function onOverlay(e) {
+      if (e.target === dom.confirmModalOverlay) cleanup(false);
+    }
+
+    dom.confirmModalOk.addEventListener('click', onOk);
+    dom.confirmModalCancel.addEventListener('click', onCancel);
+    dom.confirmModalOverlay.addEventListener('click', onOverlay);
+  });
 }

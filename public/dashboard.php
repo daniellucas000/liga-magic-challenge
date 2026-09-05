@@ -13,7 +13,7 @@ ob_start();
                 Olá,
                 <strong id="user-name"></strong>
             </span>
-            <button class="btn" id="logout-btn">
+            <button class="btn" id="logout-btn" style="color: #fff;">
                 <span class="icon">⏻</span>
                 Sair
             </button>
@@ -53,13 +53,17 @@ ob_start();
     </div>
 
     <div class="filters">
-        <select id="game-filter">
-            <option value="">Todos os jogos</option>
-            <option value="magic">Magic: The Gathering</option>
-            <option value="pokemon">Pokémon</option>
-            <option value="yugioh">Yu-Gi-Oh!</option>
-        </select>
-        <input type="text" id="search-filter" placeholder="Buscar por nome..." />
+        <div class="field">
+            <select id="game-filter">
+                <option value="">Todos os jogos</option>
+                <option value="magic">Magic: The Gathering</option>
+                <option value="pokemon">Pokémon</option>
+                <option value="yugioh">Yu-Gi-Oh!</option>
+            </select>
+        </div>
+        <div class="field">
+            <input type="text" id="search-filter" placeholder="Buscar por nome..." />
+        </div>
 
         <div class="view-toggle" role="group" aria-label="Modo de visualização">
             <button type="button" class="view-toggle__btn is-active" id="view-table-btn" aria-pressed="true" title="Visualizar em tabela">
@@ -78,11 +82,11 @@ ob_start();
                     <th>Imagem</th>
                     <th>
                         <button type="button" class="table-sort" id="sort-name">
-                            Nome (EN)
+                            Nome (inglês)
                             <span class="sort-arrow">↕</span>
                         </button>
                     </th>
-                    <th>Nome (PT)</th>
+                    <th>Nome (português)</th>
                     <th>Jogo</th>
                     <th>Edição</th>
                     <th>
@@ -91,7 +95,7 @@ ob_start();
                             <span class="sort-arrow">↕</span>
                         </button>
                     </th>
-                    <th>Ações</th>
+                    <th id="actions-header">Ações</th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -152,7 +156,6 @@ ob_start();
                     <select id="edition" required disabled>
                         <option value="">Selecione um jogo primeiro</option>
                     </select>
-                    <span class="select-loading" id="edition-loading">Buscando edições...</span>
                 </div>
 
                 <div class="field-row">
@@ -181,6 +184,16 @@ ob_start();
                 style="width: auto; padding-left: 24px; padding-right: 24px">
                 Salvar carta
             </button>
+        </div>
+    </div>
+</div>
+
+<div id="confirm-modal-overlay" class="modal-overlay">
+    <div class="modal">
+        <p id="confirm-modal-message"></p>
+        <div class="modal-actions">
+            <button id="confirm-modal-cancel">Cancelar</button>
+            <button id="confirm-modal-ok" class="btn-danger">Confirmar</button>
         </div>
     </div>
 </div>

@@ -5,7 +5,6 @@ ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
 set_exception_handler(function (Throwable $e) {
-    error_log($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
     http_response_code(500);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(['error' => 'Erro interno no servidor.']);

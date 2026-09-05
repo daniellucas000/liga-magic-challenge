@@ -17,4 +17,5 @@ export const state = {
   sortColumn: null,
   sortDirection: 'asc',
   userRole: null,
+  selectedIds: new Set(),
 };

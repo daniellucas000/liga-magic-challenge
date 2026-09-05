@@ -151,6 +151,34 @@ class CardController
         Http::json(['ok' => true]);
     }
 
+    public function bulkDelete(): void
+    {
+        $data = Http::jsonBody();
+
+        if (!is_array($data) || empty($data['ids']) || !is_array($data['ids'])) {
+            Http::json(['error' => 'IDs são obrigatórios.'], 422);
+            return;
+        }
+
+        $ids = array_map('intval', $data['ids']);
+        $deleted = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $card = Card::getById($id);
+
+            if (!$card || $this->assertOwnership($card)) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            Card::delete($id);
+            $deleted[] = $id;
+        }
+
+        Http::json(['deleted' => $deleted, 'skipped' => $skipped]);
+    }
+
     public function editions(): void
     {
         $game = $_GET['game'] ?? '';

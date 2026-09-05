@@ -21,10 +21,9 @@ export async function checkSession({ requireAdmin = false } = {}) {
   }
 }
 
-export function bindHeader(user) {
+export function bindHeader(user, { manageUsersBtn } = {}) {
   document.getElementById('user-name').textContent = user.username;
 
-  const manageUsersBtn = document.getElementById('manage-users-btn');
   if (manageUsersBtn && user.role === 'admin') {
     manageUsersBtn.style.display = '';
   }

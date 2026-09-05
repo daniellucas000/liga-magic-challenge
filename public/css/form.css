@@ -26,6 +26,18 @@
     outline: 2px solid transparent;
 }
 
+.file-upload-btn {
+    border: 1px solid var(--orange);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.file-upload-input {
+    display: none;
+}
+
 .field select {
     padding: 8px 12px;
 }

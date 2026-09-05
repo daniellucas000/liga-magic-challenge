@@ -10,8 +10,8 @@ ob_start();
             </div>
         </div>
         <div class="login-card__body">
-            <div class="error-msg" id="erro-login"></div>
-            <form id="form-login" novalidate>
+            <div class="error-msg" id="login-error"></div>
+            <form id="login-form" novalidate>
                 <div class="field">
                     <label for="username">Usuário</label>
                     <input
@@ -22,15 +22,15 @@ ob_start();
                         required />
                 </div>
                 <div class="field">
-                    <label for="senha">Senha</label>
+                    <label for="password">Senha</label>
                     <input
                         type="password"
-                        id="senha"
-                        name="senha"
+                        id="password"
+                        name="password"
                         autocomplete="current-password"
                         required />
                 </div>
-                <button type="submit" class="btn btn--primary" id="btn-entrar">
+                <button type="submit" class="btn btn--primary" id="btn-login">
                     Entrar
                 </button>
             </form>

@@ -8,7 +8,7 @@ export async function apiFetch(path, options = {}) {
 
   if (response.status === 401) {
     window.location.href = 'login.php';
-    throw new Error('unauthorized');
+    throw new Error('Não autorizado');
   }
 
   return response;

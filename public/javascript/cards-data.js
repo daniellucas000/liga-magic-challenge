@@ -16,12 +16,12 @@ export function sortCards(cards) {
 export function getFilteredCards(gameFilterValue, searchValue) {
   const search = searchValue.trim().toLowerCase();
 
-  const filtered = state.cardsCache.filter((c) => {
-    const matchesGame = !gameFilterValue || c.card_game === gameFilterValue;
+  const filtered = state.cardsCache.filter((card) => {
+    const matchesGame = !gameFilterValue || card.card_game === gameFilterValue;
     const matchesSearch =
       !search ||
-      c.english_name.toLowerCase().includes(search) ||
-      (c.portuguese_name || '').toLowerCase().includes(search);
+      card.english_name.toLowerCase().includes(search) ||
+      (card.portuguese_name || '').toLowerCase().includes(search);
     return matchesGame && matchesSearch;
   });
 
@@ -50,4 +50,20 @@ export function handleSort(column, onSorted) {
   }
   state.currentPage = 1;
   onSorted();
+}
+
+export function toggleSelect(id) {
+  if (state.selectedIds.has(id)) {
+    state.selectedIds.delete(id);
+  } else {
+    state.selectedIds.add(id);
+  }
+}
+
+export function clearSelection() {
+  state.selectedIds.clear();
+}
+
+export function selectAll(ids) {
+  ids.forEach((id) => state.selectedIds.add(id));
 }

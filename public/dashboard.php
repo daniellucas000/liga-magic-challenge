@@ -5,11 +5,11 @@ ob_start();
 <main>
     <div class="page-head">
         <div>
-            <h2>Cartas cadastradas</h2>
+            <h2>Gerenciamento de cartas</h2>
             <p>Liste, adicione, edite e remova cartas do acervo.</p>
         </div>
         <div style="display: flex; gap: 10px;">
-            <a href="users.php" class="btn btn--secondary" id="manage-users-btn">Usuários</a>
+            <a href="users.php" class="btn btn--secondary" id="manage-users-btn" style="display: none;">Usuários</a>
             <button class="btn btn--primary" id="new-card-btn" style="width: fit-content;">+ Nova carta</button>
         </div>
     </div>
@@ -36,7 +36,7 @@ ob_start();
         </div>
     </div>
 
-    <div class="filters">
+    <div class="filters" id="filters-bar">
         <div class="field">
             <select id="game-filter">
                 <option value="">Todos os jogos</option>
@@ -59,10 +59,16 @@ ob_start();
         </div>
     </div>
 
+    <div class="bulk-actions-bar" id="bulk-actions-bar" style="display:none;">
+        <span id="bulk-selected-count">0 selecionadas</span>
+        <button class="btn btn--danger" id="bulk-delete-btn">Excluir selecionadas</button>
+    </div>
+
     <div class="card-table-wrap" id="table-view">
         <table>
             <thead>
                 <tr>
+                    <th id="select-all-header"><input type="checkbox" id="select-all-checkbox" /></th>
                     <th>Imagem</th>
                     <th>
                         <button type="button" class="table-sort" id="sort-name">
@@ -84,7 +90,7 @@ ob_start();
             </thead>
             <tbody id="table-body">
                 <tr class="loading-row">
-                    <td colspan="7">Carregando cartas...</td>
+                    <td colspan="8">Carregando cartas...</td>
                 </tr>
             </tbody>
         </table>
@@ -153,7 +159,10 @@ ob_start();
                     </div>
                     <div class="field">
                         <label for="image_file">Imagem da carta</label>
-                        <input type="file" id="image_file" accept="image/png, image/jpeg, image/webp" />
+                        <label for="image_file" class="file-upload-btn">
+                            Adicionar imagem
+                        </label>
+                        <input type="file" id="image_file" accept="image/png, image/jpeg, image/webp" class="file-upload-input" />
                         <img id="image_preview" style="display:none; max-width:120px; margin-top:8px; border-radius:6px;" />
                         <input type="hidden" id="image_url" name="image_url" />
                     </div>
@@ -174,10 +183,20 @@ ob_start();
 
 <div id="confirm-modal-overlay" class="modal-overlay">
     <div class="modal">
-        <p id="confirm-modal-message"></p>
-        <div class="modal-actions">
-            <button id="confirm-modal-cancel">Cancelar</button>
-            <button id="confirm-modal-ok" class="btn-danger">Confirmar</button>
+        <div class="modal__header">
+            <h2>Confirmar ação</h2>
+        </div>
+        <div class="modal__body">
+            <p id="confirm-modal-message"></p>
+        </div>
+        <div class="modal__footer">
+            <button class="btn btn--ghost" id="confirm-modal-cancel">Cancelar</button>
+            <button
+                class="btn btn--danger"
+                id="confirm-modal-ok"
+                style="width: auto; padding-left: 24px; padding-right: 24px">
+                Confirmar
+            </button>
         </div>
     </div>
 </div>

@@ -3,13 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-    radial-gradient(
-        circle at 20% 15%,
-        color-mix(in srgb, var(--orange) 30%, transparent),
-        transparent 45%
-    ),
-    #070617;
+    background: var(--background);
     padding: 24px;
 }
 
@@ -46,7 +40,6 @@
 
 .login-card__header .eyebrow {
     display: block;
-    font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     letter-spacing: 0.06em;
     color: var(--brass-dark);

@@ -15,6 +15,8 @@ $router->add('POST',   '/api/cards',    [CardController::class, 'create'],     a
 $router->add('PUT',    '/api/cards',    [CardController::class, 'update'],    auth: true, roles: ['admin', 'editor']);
 $router->add('POST',   '/api/cards/{id}/duplicate', [CardController::class, 'duplicate'], auth: true, roles: ['admin', 'editor']);
 $router->add('DELETE', '/api/cards',    [CardController::class, 'delete'],    auth: true, roles: ['admin', 'editor']);
+$router->add('POST', '/api/cards/bulk-delete', [CardController::class, 'bulkDelete'], auth: true, roles: ['admin', 'editor']);
+
 $router->add('GET',    '/api/editions', [CardController::class, 'editions'],  auth: true);
 $router->add('POST', '/api/upload-image', [CardController::class, 'uploadImage'], auth: true, roles: ['admin', 'editor']);
 

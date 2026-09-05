@@ -19,7 +19,7 @@ ob_start();
             <thead>
                 <tr>
                     <th>Usuário</th>
-                    <th>Role</th>
+                    <th>Cargo</th>
                     <th>Cadastrado em</th>
                     <th>Ações</th>
                 </tr>

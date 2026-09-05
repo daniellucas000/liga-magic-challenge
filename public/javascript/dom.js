@@ -49,4 +49,10 @@ export const dom = {
 
   manageUsersBtn: document.getElementById('manage-users-btn'),
   actionsHeader: document.getElementById('actions-header'),
+  filtersBar: document.getElementById('filters-bar'),
+
+  selectAllCheckbox: document.getElementById('select-all-checkbox'),
+  bulkActionsBar: document.getElementById('bulk-actions-bar'),
+  bulkSelectedCount: document.getElementById('bulk-selected-count'),
+  bulkDeleteBtn: document.getElementById('bulk-delete-btn'),
 };

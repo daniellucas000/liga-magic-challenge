@@ -15,7 +15,7 @@ function getEmptyStateHtml(game) {
   }
 
   if (game === 'magic') {
-    emptyImage = `<img src="images/magic.webp" alt="Nenhuma carta de Magic: The Gathering encontrada">`;
+    emptyImage = `<img src="images/magic-empty.jpeg" alt="Nenhuma carta de Magic: The Gathering encontrada">`;
   }
 
   if (game === 'pokemon') {
@@ -33,13 +33,15 @@ function getEmptyStateHtml(game) {
 
 function cardRowHtml(card) {
   const isViewer = state.userRole === 'viewer';
+  const isChecked = state.selectedIds.has(card.id);
 
   return `
     <tr>
+        ${isViewer ? '' : `<td><input type="checkbox" class="row-checkbox" data-select="${card.id}" ${isChecked ? 'checked' : ''} /></td>`}
         <td data-label="Imagem">${
           card.image
             ? `<img class="thumb" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.english_name)}" onerror="this.style.visibility='hidden'">`
-            : `<div class="thumb">${card.english_name.slice(0, 2)}</div>`
+            : `<div class="thumb"></div>`
         }</td>
         <td data-label="Nome (inglês)">${escapeHtml(card.english_name)}</td>
         <td data-label="Nome (português)">${escapeHtml(card.portuguese_name || '—')}</td>
@@ -141,6 +143,8 @@ function renderTable() {
   const filtered = getFilteredCards(game, dom.searchFilter.value);
   const { pageItems, totalPages } = getPaginatedCards(filtered);
 
+  dom.filtersBar.style.display = state.cardsCache.length === 0 ? 'none' : '';
+
   renderPagination(filtered.length, totalPages);
 
   dom.tableBody.innerHTML =
@@ -154,6 +158,8 @@ function renderGrid() {
   const filtered = getFilteredCards(game, dom.searchFilter.value);
   const { pageItems, totalPages } = getPaginatedCards(filtered);
 
+  dom.filtersBar.style.display = state.cardsCache.length === 0 ? 'none' : '';
+
   renderPagination(filtered.length, totalPages);
 
   dom.cardsViewEl.innerHTML =
@@ -161,7 +167,6 @@ function renderGrid() {
       ? `<div style="grid-column: 1 / -1;">${getEmptyStateHtml(game)}</div>`
       : pageItems.map(cardItemHtml).join('');
 }
-
 export function render() {
   renderSortIndicators();
 

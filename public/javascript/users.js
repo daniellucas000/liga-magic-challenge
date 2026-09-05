@@ -27,7 +27,7 @@ function userRowHtml(user, currentUserId) {
   return `
     <tr>
       <td data-label="Usuário">${escapeHtml(user.username)}${isSelf ? ' (você)' : ''}</td>
-      <td data-label="Role">${roleCell}</td>
+      <td data-label="Cargo">${roleCell}</td>
       <td data-label="Cadastrado em">${escapeHtml(formatDate(user.created_at))}</td>
       <td data-label="Ações">
         ${
@@ -82,13 +82,13 @@ async function saveRole(id) {
     if (!res.ok) {
       showToast(
         dom.toast,
-        data.error || 'Não foi possível atualizar a role.',
+        data.error || 'Não foi possível atualizar o cargo.',
         'error'
       );
       return;
     }
 
-    showToast(dom.toast, 'Role atualizada com sucesso.');
+    showToast(dom.toast, 'Cargo atualizado com sucesso.');
   } catch (e) {
     showToast(dom.toast, 'Erro de conexão com o servidor.', 'error');
   } finally {

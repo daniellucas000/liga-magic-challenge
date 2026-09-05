@@ -3,7 +3,13 @@ import { state } from './state.js';
 import { apiFetch } from './api.js';
 import { checkSession, bindHeader } from './session.js';
 import { render, renderStats } from './render.js';
-import { handleSort } from './cards-data.js';
+import {
+  handleSort,
+  toggleSelect,
+  clearSelection,
+  selectAll,
+} from './cards-data.js';
+import { showToast } from './utils.js';
 import {
   openNewModal,
   openEditModal,
@@ -12,52 +18,111 @@ import {
   deleteCard,
   duplicateCard,
   fetchEditions,
+  confirmModal,
 } from './modal.js';
 
 async function initSession() {
   const user = await checkSession();
   if (!user) return;
 
-  bindHeader(user);
+  bindHeader(user, { manageUsersBtn: dom.manageUsersBtn });
   state.userRole = user.role;
 
   if (state.userRole === 'viewer') {
     dom.newCardBtn.style.display = 'none';
     dom.actionsHeader.style.display = 'none';
+    dom.selectAllHeader.style.display = 'none';
   }
 }
 
 async function loadCards() {
   dom.tableBody.innerHTML =
-    '<tr class="loading-row"><td colspan="7">Carregando cartas...</td></tr>';
+    '<tr class="loading-row"><td colspan="8">Carregando cartas...</td></tr>';
 
   try {
     const res = await apiFetch('/cards');
 
     if (!res.ok) {
       dom.tableBody.innerHTML =
-        '<tr class="loading-row"><td colspan="7">Falha ao carregar as cartas.</td></tr>';
+        '<tr class="loading-row"><td colspan="8">Falha ao carregar as cartas.</td></tr>';
       return;
     }
 
     const data = await res.json();
     state.cardsCache = data.cards || [];
+    clearSelection();
+    updateBulkBar();
     renderStats();
     render();
   } catch (e) {
     dom.tableBody.innerHTML =
-      '<tr class="loading-row"><td colspan="7">Falha ao carregar as cartas.</td></tr>';
+      '<tr class="loading-row"><td colspan="8">Falha ao carregar as cartas.</td></tr>';
   }
+}
+
+function updateBulkBar() {
+  const count = state.selectedIds.size;
+  dom.bulkActionsBar.style.display = count > 0 ? 'flex' : 'none';
+  dom.bulkSelectedCount.textContent = `${count} selecionada${count === 1 ? '' : 's'}`;
 }
 
 function handleListClick(e) {
   const editBtn = e.target.closest('[data-edit]');
   const deleteBtn = e.target.closest('[data-delete]');
   const duplicateBtn = e.target.closest('[data-duplicate]');
+  const selectCheckbox = e.target.closest('[data-select]');
 
   if (editBtn) openEditModal(editBtn.dataset.edit);
   if (deleteBtn) deleteCard(deleteBtn.dataset.delete, loadCards);
   if (duplicateBtn) duplicateCard(duplicateBtn.dataset.duplicate, loadCards);
+
+  if (selectCheckbox) {
+    toggleSelect(Number(selectCheckbox.dataset.select));
+    updateBulkBar();
+    dom.selectAllCheckbox.checked = false;
+    render();
+  }
+}
+
+async function bulkDelete() {
+  const confirmed = await confirmModal(
+    `Tem certeza que deseja excluir ${state.selectedIds.size} carta(s)? Esta ação não pode ser desfeita.`
+  );
+  if (!confirmed) return;
+
+  dom.bulkDeleteBtn.disabled = true;
+
+  try {
+    const res = await apiFetch('/cards/bulk-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: [...state.selectedIds] }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(dom.toast, data.error || 'Não foi possível excluir.', 'error');
+      return;
+    }
+
+    if (data.skipped?.length) {
+      showToast(
+        dom.toast,
+        `${data.deleted.length} excluída(s), ${data.skipped.length} sem permissão.`,
+        'error'
+      );
+    } else {
+      showToast(dom.toast, `${data.deleted.length} carta(s) excluída(s).`);
+    }
+
+    clearSelection();
+    updateBulkBar();
+    loadCards();
+  } catch (e) {
+    showToast(dom.toast, 'Erro de conexão com o servidor.', 'error');
+  } finally {
+    dom.bulkDeleteBtn.disabled = false;
+  }
 }
 
 function setView(view) {
@@ -144,6 +209,18 @@ function bindEvents() {
     state.currentPage++;
     render();
   });
+
+  dom.selectAllCheckbox.addEventListener('change', function () {
+    if (this.checked) {
+      selectAll(state.cardsCache.map((c) => c.id));
+    } else {
+      clearSelection();
+    }
+    updateBulkBar();
+    render();
+  });
+
+  dom.bulkDeleteBtn.addEventListener('click', bulkDelete);
 }
 
 bindEvents();

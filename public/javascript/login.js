@@ -1,18 +1,18 @@
 (function () {
   const API_BASE = '/api';
 
-  const form = document.getElementById('form-login');
-  const erroBox = document.getElementById('erro-login');
-  const btnEntrar = document.getElementById('btn-entrar');
+  const form = document.getElementById('login-form');
+  const errorBox = document.getElementById('login-error');
+  const btnLogin = document.getElementById('btn-login');
 
-  function mostrarErro(msg) {
-    erroBox.textContent = msg;
-    erroBox.classList.add('visible');
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.classList.add('visible');
   }
 
-  function limparErro() {
-    erroBox.textContent = '';
-    erroBox.classList.remove('visible');
+  function clearError() {
+    errorBox.textContent = '';
+    errorBox.classList.remove('visible');
   }
 
   fetch(`${API_BASE}/session`, { credentials: 'include' })
@@ -23,18 +23,18 @@
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    limparErro();
+    clearError();
 
     const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('senha').value;
+    const password = document.getElementById('password').value;
 
     if (!username || !password) {
-      mostrarErro('Preencha usuário e senha.');
+      showError('Preencha usuário e senha.');
       return;
     }
 
-    btnEntrar.disabled = true;
-    btnEntrar.textContent = 'Entrando...';
+    btnLogin.disabled = true;
+    btnLogin.textContent = 'Entrando...';
 
     try {
       const res = await fetch(`${API_BASE}/login`, {
@@ -43,19 +43,19 @@
         credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
-      const dados = await res.json();
+      const data = await res.json();
 
       if (!res.ok) {
-        mostrarErro(dados.error || 'Não foi possível entrar.');
+        showError(data.error || 'Não foi possível entrar.');
         return;
       }
 
       window.location.href = 'dashboard.php';
     } catch (err) {
-      mostrarErro('Erro de conexão com o servidor.');
+      showError('Erro de conexão com o servidor.');
     } finally {
-      btnEntrar.disabled = false;
-      btnEntrar.textContent = 'Entrar';
+      btnLogin.disabled = false;
+      btnLogin.textContent = 'Entrar';
     }
   });
 })();

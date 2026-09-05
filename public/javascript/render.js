@@ -41,7 +41,7 @@ function cardRowHtml(card) {
         <td data-label="Imagem">${
           card.image
             ? `<img class="thumb" src="${escapeHtml(card.image)}" alt="${escapeHtml(card.english_name)}" onerror="this.style.visibility='hidden'">`
-            : `<div class="thumb"></div>`
+            : `<div class="thumb">${card.english_name.slice(0, 2)}</div>`
         }</td>
         <td data-label="Nome (inglês)">${escapeHtml(card.english_name)}</td>
         <td data-label="Nome (português)">${escapeHtml(card.portuguese_name || '—')}</td>
